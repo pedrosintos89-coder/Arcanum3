@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcanum AI: تحويل المباني للطراز الكلاسيكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0;
+            width: 80px;
+            height: 3px;
+            background-color: #3498db;
+            border-radius: 2px;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .upload-section, .controls-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px dashed #aed6f1;
+            border-radius: 10px;
+            background-color: #ecf0f1;
+        }
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1em;
+            font-weight: bold;
+        }
+        .custom-file-upload:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        #fileName {
+            margin-right: 15px;
+            color: #555;
+            font-size: 0.95em;
+        }
+        .image-preview {
+            margin-top: 25px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fdfdfd;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 6px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .control-group label {
+            margin-bottom: 0;
+            font-size: 1em;
+            font-weight: normal;
+        }
+        select, button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid #bdc3c7;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        select {
+            background-color: #fff;
+            min-width: 180px;
+        }
+        button.action-btn {
+            background-color: #2ecc71;
+            color: white;
+            border-color: #27ae60;
+            font-weight: bold;
+        }
+        button.action-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            color: #666;
+            border-color: #bbbbbb;
+        }
+        .results-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .result-box {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .result-box h3 {
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .result-box img, .result-box canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .status-message {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .status-message.success {
+            color: #2ecc71;
+        }
+        .disclaimer {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #ecf0f1;
+            border-left: 5px solid #3498db;
+            text-align: right;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✨ Arcanum AI: كاشف الأسرار المعمارية</h1>
+        <p>قم بتحميل صورة مبنى بسيط، وسيقوم الذكاء الاصطناعي بتحويله إلى طراز معماري أوروبي كلاسيكي، مع مراعاة التماثل (Symmetry) والقدرة على تغيير زاوية الرؤية (محاكاة).</p>
+
+        <div class="upload-section">
+            <label for="buildingImageUpload">
+                الخطوة 1: تحميل صورة المبنى (يفضل أن تكون الواجهة مرئية بوضوح)
+            </label>
+            <input type="file" id="buildingImageUpload" accept="image/*">
+            <label for="buildingImageUpload" class="custom-file-upload">
+                اختيار صورة
+            </label>
+            <span id="fileName">لم يتم اختيار ملف</span>
+            <div class="image-preview">
+                <img id="originalImagePreview" src="" alt="معاينة الصورة الأصلية" style="display: none;">
+                <p id="noImageText">لا توجد صورة للمعاينة</p>
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <label>
+                الخطوة 2: تحديد تفضيلات التحويل (محاكاة)
+            </label>
+            <div class="control-group">
+                <label for="architecturalStyle">الطراز المعماري:</label>
+                <select id="architecturalStyle">
+                    <option value="baroque">باروك (Baroque)</option>
+                    <option value="neoclassical">نيو كلاسيك (Neoclassical)</option>
+                    <option value="gothic">قوطي (Gothic)</option>
+                    <option value="renaissance">عصر النهضة (Renaissance)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="viewAngle">زاوية الرؤية (محاكاة):</label>
+                <select id="viewAngle">
+                    <option value="front">واجهة أمامية</option>
+                    <option value="slight-left">مائلة قليلاً لليسار</option>
+                    <option value="slight-right">مائلة قليلاً لليمين</option>
+                    <option value="top-down">منظور علوي</option>
+                </select>
+            </div>
+            <button id="transformButton" class="action-btn" disabled>
+                تحويل المبنى بالذكاء الاصطناعي
+            </button>
+            <p id="statusMessage" class="status-message"></p>
+        </div>
+
+        <div class="results-section">
+            <div class="result-box">
+                <h3>الصورة الأصلية</h3>
+                <img id="originalOutput" src="" alt="الصورة الأصلية" style="display: none;">
+            </div>
+            <div class="result-box">
+                <h3>المبنى بعد التحويل (Arcanum)</h3>
+                <canvas id="transformedCanvas" style="display: none;"></canvas>
+                <p id="noTransformedText">هنا ستظهر الصورة بعد التحويل</p>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <p><strong>ملاحظة هامة:</strong> هذا التطبيق في صورته الحالية هو هيكل توضيحي. الوظائف المعقدة مثل "إكمال الصورة بناءً على التماثل" و "تغيير زاوية الرؤية بشكل واقعي" و "التحويل للطراز الكلاسيكي بجودة عالية" تتطلب دمج نماذج ذكاء اصطناعي توليدية (مثل Stable Diffusion أو StyleGAN) والتي تحتاج إلى قوة معالجة كبيرة (GPUs) وتُشغل عادةً على خوادم خاصة (Backend AI APIs) وليست مباشرة في المتصفح. الكود الحالي يقوم بمحاكاة هذه العمليات بأساليب بسيطة من معالجة الصور.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
